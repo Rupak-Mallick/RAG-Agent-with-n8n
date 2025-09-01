@@ -1,0 +1,181 @@
+{
+  "name": "RAG AGENT",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -64,
+        128
+      ],
+      "id": "a61689dd-7619-468c-91d6-6edda29d40b3",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "modelName": "embed-multilingual-v2.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        112,
+        288
+      ],
+      "id": "a58818cd-fd20-4608-92b8-617d4deae705",
+      "name": "Embeddings Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "0mMzZXOKuaO4q3h3",
+          "name": "CohereApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a helpful assistant,Retrieve data when user asks for relevant data about lotto annual earnings report"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        -80
+      ],
+      "id": "3dbf242e-6a52-4fa3-a30f-ac28382298cd",
+      "name": "RAG Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        128
+      ],
+      "id": "3aaf23cc-109a-40ab-8ea9-b16ae7b20f37",
+      "name": "Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "ePNcOC10x4wDco1l",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -304,
+        -80
+      ],
+      "id": "575e1bcc-44b0-4aee-9f8e-0c176acc856f",
+      "name": "Input message ",
+      "webhookId": "ec9991c8-b29f-40a1-b901-24cad85dfa81"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "n8ndatabase2",
+        "toolDescription": "Retrieve data when user asks for relevant data about lotto annual earnings report",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "n8ndatabase2",
+          "mode": "list",
+          "cachedResultName": "n8ndatabase2"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        128
+      ],
+      "id": "aca51bbb-4e68-4607-a197-8465ba3b23ec",
+      "name": " Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "0SiChl2gAgAJXCdk",
+          "name": "PineconeApi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "RAG Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere": {
+      "ai_embedding": [
+        [
+          {
+            "node": " Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "RAG Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Input message ": {
+      "main": [
+        [
+          {
+            "node": "RAG Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    " Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "RAG Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "606ff34e-832a-4e10-9dd3-a09820663d86",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "418c73e00c5157b95243ccb02fcb19f0645cffb6e90c89e6562547d6a5d3f7e5"
+  },
+  "id": "9wPCCXxRplmCkn8r",
+  "tags": []
+}
