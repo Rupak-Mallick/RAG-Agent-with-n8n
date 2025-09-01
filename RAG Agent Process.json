@@ -1,0 +1,217 @@
+{
+  "name": "RAG Agent Process",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFile",
+        "fileToWatch": {
+          "__rl": true,
+          "value": "1a0LaOBhRLnkaakN2eiCSdS9EeJCtvB8G",
+          "mode": "list",
+          "cachedResultName": "lotto annual earnings report.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1a0LaOBhRLnkaakN2eiCSdS9EeJCtvB8G/view?usp=drivesdk"
+        }
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        -80
+      ],
+      "id": "0ea2f9a8-a7ff-4175-9eda-7dabb636782c",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Z0kXKVHOVUbYNVCU",
+          "name": "Google Drive account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1a0LaOBhRLnkaakN2eiCSdS9EeJCtvB8G",
+          "mode": "list",
+          "cachedResultName": "lotto annual earnings report.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1a0LaOBhRLnkaakN2eiCSdS9EeJCtvB8G/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -160,
+        -80
+      ],
+      "id": "1faaa9d3-f8d5-4110-a9a6-da8dbd2622cd",
+      "name": "Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Z0kXKVHOVUbYNVCU",
+          "name": "Google Drive account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "embed-multilingual-v2.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        144
+      ],
+      "id": "f7dfd23f-6578-46b8-9d06-dcb28b954741",
+      "name": "Embeddings Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "0mMzZXOKuaO4q3h3",
+          "name": "CohereApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "file-name",
+                "value": "={{ $('Google Drive').item.json.name }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        208,
+        144
+      ],
+      "id": "7bb2e774-1fd4-4944-9392-39bc2e275053",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "chunkSize": 500,
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        304,
+        368
+      ],
+      "id": "db15bb07-0c1a-4f23-93a9-bd0394c020e7",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "n8ndatabase2",
+          "mode": "list",
+          "cachedResultName": "n8ndatabase2"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        -80
+      ],
+      "id": "756d04df-231e-4199-aa28-2a3423721917",
+      "name": " Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "0SiChl2gAgAJXCdk",
+          "name": "PineconeApi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": " Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere": {
+      "ai_embedding": [
+        [
+          {
+            "node": " Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": " Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "355b8442-e408-4285-9989-06b17c46d522",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "418c73e00c5157b95243ccb02fcb19f0645cffb6e90c89e6562547d6a5d3f7e5"
+  },
+  "id": "D9tNsoVmUbTuuaef",
+  "tags": []
+}
