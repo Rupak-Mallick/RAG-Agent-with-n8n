@@ -35,7 +35,7 @@
       "parameters": {
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "You are a helpful assistant,Retrieve data when user asks for relevant data about lotto annual earnings report"
+          "systemMessage": "You are a helpful assistant, Retrieve data only from knowledgebase when user asks for relevant data about AI revolution and if you don't find then only you answer by yourself. Retrieve data according to specific question only. Don't verbose, Strictly response according to knowledge base and in succinct."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -49,7 +49,10 @@
     },
     {
       "parameters": {
-        "options": {}
+        "model": "moonshotai/kimi-k2-instruct-0905",
+        "options": {
+          "temperature": 0.3
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
@@ -84,12 +87,12 @@
       "parameters": {
         "mode": "retrieve-as-tool",
         "toolName": "n8ndatabase2",
-        "toolDescription": "Retrieve data when user asks for relevant data about lotto annual earnings report",
+        "toolDescription": "You are a helpful assistant, Retrieve data only from knowledgebase when user asks for relevant data about AI revolution and if you don't find then only you answer by yourself. Retrieve data according to specific question only. Don't verbose, Strictly response according to knowledge base and in succinct.",
         "pineconeIndex": {
           "__rl": true,
-          "value": "n8ndatabase2",
+          "value": "ragforn8n",
           "mode": "list",
-          "cachedResultName": "n8ndatabase2"
+          "cachedResultName": "ragforn8n"
         },
         "options": {}
       },
@@ -171,7 +174,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "606ff34e-832a-4e10-9dd3-a09820663d86",
+  "versionId": "461e7737-a906-4aab-8e4b-ebdd71a2ed3b",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "418c73e00c5157b95243ccb02fcb19f0645cffb6e90c89e6562547d6a5d3f7e5"
