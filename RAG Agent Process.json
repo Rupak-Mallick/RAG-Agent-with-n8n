@@ -6,18 +6,18 @@
         "pollTimes": {
           "item": [
             {
-              "mode": "everyMinute"
+              "mode": "custom"
             }
           ]
         },
-        "triggerOn": "specificFile",
-        "fileToWatch": {
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
           "__rl": true,
-          "value": "1a0LaOBhRLnkaakN2eiCSdS9EeJCtvB8G",
-          "mode": "list",
-          "cachedResultName": "lotto annual earnings report.pdf",
-          "cachedResultUrl": "https://drive.google.com/file/d/1a0LaOBhRLnkaakN2eiCSdS9EeJCtvB8G/view?usp=drivesdk"
-        }
+          "value": "https://drive.google.com/drive/u/0/folders/1p_-cyfT1qKYWuihwKLk3GAETxpOo9x1Z",
+          "mode": "url"
+        },
+        "event": "fileUpdated",
+        "options": {}
       },
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
@@ -29,8 +29,8 @@
       "name": "Google Drive Trigger",
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "Z0kXKVHOVUbYNVCU",
-          "name": "Google Drive account 3"
+          "id": "fhgayou2TfAOYsbd",
+          "name": "Google Drive account"
         }
       }
     },
@@ -39,10 +39,8 @@
         "operation": "download",
         "fileId": {
           "__rl": true,
-          "value": "1a0LaOBhRLnkaakN2eiCSdS9EeJCtvB8G",
-          "mode": "list",
-          "cachedResultName": "lotto annual earnings report.pdf",
-          "cachedResultUrl": "https://drive.google.com/file/d/1a0LaOBhRLnkaakN2eiCSdS9EeJCtvB8G/view?usp=drivesdk"
+          "value": "={{ $json.webContentLink }} {{ $json.webViewLink }}",
+          "mode": "url"
         },
         "options": {}
       },
@@ -56,8 +54,8 @@
       "name": "Google Drive",
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "Z0kXKVHOVUbYNVCU",
-          "name": "Google Drive account 3"
+          "id": "fhgayou2TfAOYsbd",
+          "name": "Google Drive account"
         }
       }
     },
@@ -123,9 +121,9 @@
         "mode": "insert",
         "pineconeIndex": {
           "__rl": true,
-          "value": "n8ndatabase2",
+          "value": "ragforn8n",
           "mode": "list",
-          "cachedResultName": "n8ndatabase2"
+          "cachedResultName": "ragforn8n"
         },
         "options": {}
       },
@@ -207,7 +205,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "355b8442-e408-4285-9989-06b17c46d522",
+  "versionId": "c691f9c6-4d43-4736-9872-9d2cf4a44ba0",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "418c73e00c5157b95243ccb02fcb19f0645cffb6e90c89e6562547d6a5d3f7e5"
