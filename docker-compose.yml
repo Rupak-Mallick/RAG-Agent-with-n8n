@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  n8n:
+    build: .
+    ports:
+      - "5678:5678" # Maps your local machine's port 5678 to n8n's port 5678
+    environment:
+      # General n8n Configuration
+      - N8N_HOST=${N8N_HOST:-localhost} 
+      - N8N_PORT=${N8N_PORT:-5678}
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-YourRandomEncryptionKey32Chars} # Change this for production!
+
+      # --- SET YOUR CREDENTIALS HERE ---
+      # Cohere API Key (for Embeddings Cohere node)
+      - COHERE_API_KEY=
+
+      # Pinecone API Key (for Vector Store node)
+      - PINECONE_API_KEY=
+      - PINECONE_ENVIRONMENT= # e.g., 'us-east4-gcp'
+
+      # Groq API Key (for Chat Model node)
+      - GROQ_API_KEY=
+
+      # Google Drive Credentials (for Trigger and Download nodes)
+      # These are more complex and usually require OAuth2 setup via the n8n UI.
+      # It's often easier to create these credentials manually after startup.
+      # - GOOGLE_DRIVE_CLIENT_ID=your_client_id
+      # - GOOGLE_DRIVE_CLIENT_SECRET=your_client_secret
+      # - GOOGLE_DRIVE_ACCESS_TOKEN=your_access_token
+      # - GOOGLE_DRIVE_REFRESH_TOKEN=your_refresh_token
+
+    volumes:
+      # Persist n8n data (credentials, database, etc.) between container restarts
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:
